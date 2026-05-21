@@ -1,0 +1,238 @@
+# -------------------------
+# CONFIG BASE
+# -------------------------
+
+set $mod Mod4
+font pango:Inconsolata Nerd Font 10
+
+# Autostart XDG apps
+exec --no-startup-id dex --autostart --environment i3
+
+# -------------------------
+# AUTOSTART
+# -------------------------
+
+exec --no-startup-id dunst
+exec --no-startup-id input-leap
+exec --no-startup-id flameshot
+exec --no-startup-id ~/.scripts/fix-flatpak.sh
+exec --no-startup-id nm-applet
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id pasystray
+
+# -------------------------
+# AUDIO
+# -------------------------
+
+bindsym Home exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +1%
+bindsym End exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+
+# -------------------------
+# WINDOW MOVEMENT
+# -------------------------
+
+floating_modifier $mod
+tiling_drag modifier titlebar
+
+
+# -------------------------
+# TERMINAL
+# -------------------------
+
+bindsym $mod+Return exec i3-sensible-terminal
+
+#Calculadora y terminal rapida y mas (Consulta como instalar)
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+#Cerrar ventana en foco
+bindsym $mod+Shift+q kill
+
+# Activar menu de apps
+bindsym $mod+d exec --no-startup-id /home/diego-xir/.local/bin/rofi_scripts/dashboard.sh
+
+# Tomar capturas de pantalla
+bindsym Print exec flameshot gui
+
+# Focus windows
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Backup arrows
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move windows
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Backup arrows
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Split
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+#Entrar en modo pantalla completa
+bindsym $mod+f fullscreen toggle
+
+# Cambiar a apilado, con pestañas, con interruptor dividido
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+#Cambio de ventana a mosaico y al reves
+bindsym $mod+Shift+space floating toggle
+
+#cambiar foco entre ventana y mosaico
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+#bloquear pantalla manualmente
+bindsym $mod+Shift+x exec i3lock
+
+# -------------------------
+# WORKSPACES
+# -------------------------
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+
+# -------------------------
+# SWITCH WORKSPACES
+# -------------------------
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+
+# -------------------------
+# MOVE WINDOWS TO WORKSPACE
+# -------------------------
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# -------------------------
+# I3 MANAGEMENT
+# -------------------------
+
+# Reload configuration
+bindsym $mod+Shift+c reload
+
+# Restart i3 without closing session
+bindsym $mod+Shift+r restart
+
+# Exit i3 session
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Parece que cerrarás la sesión. ¿Estás seguro?' -B 'Sí, salir de i3' 'i3-msg exit'"
+
+
+# -------------------------
+# RESIZE MODE
+# -------------------------
+
+mode "resize" {
+
+    # Vim-style resize controls
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    # Arrow key fallback
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # Exit resize mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+
+# Activate resize mode
+bindsym $mod+r mode "resize"
+
+# -------------------------
+# BAR CONFIG
+# -------------------------
+
+bar {
+    font pango:Inconsolata Nerd Font 10
+    status_command i3blocks -c ~/.config/i3blocks/config
+    position top
+
+    strip_workspace_numbers no
+
+    colors {
+        background #0c0d12
+        statusline #dfe0e5
+        separator #9c9ca0
+    }
+}
+
+# -----------------------
+# APPS PREDETERMINADAS
+# -----------------------
+
+assign [class="Google-chrome"] $ws2
+assign [class="VSCodium"] $ws3
+assign [class="Snes9x-gtk"] $ws8
+assign [class="duckstation-qt"] $ws8
+assign [class="scrcpy"] $ws9
+for_window [class="Minitube"] floating enable
+
+default_border pixel 2
+default_floating_border pixel 2
+for_window [class="^.*"] border pixel 2
+gaps inner 8
+gaps outer 5
+hide_edge_borders yes
+smart_borders on
+smart_gaps on
+# Clase                 Borde    Fondo    Texto    Indicador Borde_Hijo
+client.focused          #ff79c6  #ff79c6  #ffffff  #ff79c6    #ff79c6
+client.unfocused        #282a36  #282a36  #ffffff  #282a36    #282a36
