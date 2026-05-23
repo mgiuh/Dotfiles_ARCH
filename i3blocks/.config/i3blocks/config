@@ -1,50 +1,39 @@
-# i3blocks config file
+# Configuración global
 separator=true
 separator_block_width=20
-markup=pango
 
 [cpu_usage]
 command=awk '{u=$2+$4; t=$2+$4+$5; if(NR==1){u1=u; t1=t;} else print int((u-u1)/(t-t1)*100)"%"}' <(grep 'cpu ' /proc/stat; sleep 0.5; grep 'cpu ' /proc/stat)
 interval=2
 label= 
-color=#ff79c6
+color=#50FA7B
 separator=false
 
 [memory]
 command=awk '/MemTotal.*/ {t=$2} /MemAvailable.*/ {a=$2; print int((t-a)/t*100)"%"}' /proc/meminfo
 interval=10
 label= 
-color=#ff79c6
-separator=false
-
-[updates]
-command=updates=$(checkupdates 2>/dev/null | wc -l); aur=$(yay -Qua 2>/dev/null | wc -l); total=$((updates + aur)); if [ "$total" -gt 0 ]; then echo " $total"; fi
-interval=1800
-color=#ff5555
+color=#8BE9FD
 separator=false
 
 [disk]
 command=df -h / | awk 'NR==2 {print $5}'
 interval=30
 label= 
-color=#b4befe
+color=#FF79C6
 separator=false
 
 [network]
-command=ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1 && echo " OK" || echo "󱚵 OFF"
+# Este comando es más limpio: verifica conexión y devuelve solo el icono y el estado
+command=ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1 && echo " OK" || echo " OFF"
 interval=10
-color=#a6e3a1
+label=
+color=#BD93F9
 separator=false
 
 [time]
 command=FILE="/tmp/i3blocks_time_mode"; [ "$BLOCK_BUTTON" ] && ( [ -f "$FILE" ] && rm "$FILE" || touch "$FILE" ); if [ -f "$FILE" ]; then date '+%I:%M %p'; else date '+%A, %d de %B'; fi
 interval=5
-label=   
-color=#e4e8e9
-separator=false
-
-[tray_separator]
-full_text=/
-color=#9fa2a3
-separator=false
-
+label=  
+color=#F8F8F2
+min_width=100
