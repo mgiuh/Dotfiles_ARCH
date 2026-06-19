@@ -1,0 +1,84 @@
+* {
+    border: none;
+    font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+window#waybar {
+    background-color: rgba(30, 30, 46, 0.75); /* Transparencia brutal */
+    border-radius: 12px;
+    color: #cdd6f4;
+    transition-property: background-color;
+    transition-duration: .5s;
+    padding-left:10px;
+    padding-right: 15px;
+}
+
+/*Este tipo es el encargado del lado derecho*/
+.modules-right {
+    margin-right: 5px;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    color: #f5c2e7;
+}
+
+#workspaces button.active {
+    color: #cba6f7; /* Colorcito morado/púrpura pro */
+    font-weight: bold;
+}
+
+#clock, #cpu, #memory, #battery, #window, #pulseaudio{
+    padding: 0 12px;
+    border-radius: 6px;
+    background-color: rgba(17, 17, 27, 0.6);
+    margin: 2px 4px;
+    min-height: 18px; 
+}
+
+#waybar label {
+    margin-left: 6px;
+    padding-top: 0px;
+}
+
+#window {
+    color: #89b4fa;
+}
+
+#clock {
+    color: #a6e3a1;
+}
+
+#pulseaudio {
+	color: #fab387;
+}
+
+#pulseaudio {
+	color: #f38ba8;
+}
+
+/* -----------------------------------------------------------------------------
+ * EL TEMPLO DEL TRAY - LOOK PREMIUM CATPPUCCIN MOCHA
+ * ----------------------------------------------------------------------------- */
+#tray {
+    background-color: #313244; /* El sutil Surface0 de Catppuccin */
+    border-radius: 6px;        /* Esquinas curvas en perfecta armonía con Niri */
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 4px;
+    margin-right: 2px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+    opacity: 0.6;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #f38ba8; /* Rojo Catppuccin si una app parpadea o pide atención */
+    color: #11111b;
+}

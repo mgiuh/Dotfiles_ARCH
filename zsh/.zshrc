@@ -1,79 +1,112 @@
-# --- 1. CONFIGURACIÓN NÚCLEO DE OH MY ZSH ---
+# --- 1. CONFIGURACIÓN DE ENTORNO Y VARIABLES ---
 export ZSH="$HOME/.oh-my-zsh"
+export EDITOR='nvim'
+export VISUAL='nvim'
+export HISTFILE=~/.cache/zsh_history
 
-# Tema (Nota: Tu PROMPT personalizado al final sobrescribirá visualmente esto)
-ZSH_THEME="robbyrussell"
-
-# Plugins de Oh My Zsh (internos)
-plugins=(git)
-
-# Carga de Oh My Zsh
-source $ZSH/oh-my-zsh.sh
-
-# --- 2. PLUGINS EXTERNOS (Instalados vía Pacman en Arch) ---
-# Se cargan después de OMZ para evitar conflictos
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# --- 2.1 Forzar editor nano para ranger ---
-export EDITOR='vim'
-export VISUAL='vim'
-
-# --- 2.2 Importar colores de (Pywal) para tu hermosa terminal ---
-(cat ~/.cache/wal/sequences &)
-
-# --- 3. OPCIONES DE SHELL ---
-setopt AUTO_CD              # Escribe solo el nombre de una carpeta para entrar
-setopt HIST_IGNORE_DUPS     # No guarda comandos duplicados seguidos
+# --- 2. OPCIONES DE SHELL ---
+setopt AUTO_CD
+setopt HIST_IGNORE_DUPS
+setopt INC_APPEND_HISTORY
 HISTSIZE=5000
 SAVEHIST=5000
-# Guardamos el historial en .cache para mantener el HOME limpio
-HISTFILE=~/.cache/zsh_history
 
-# --- 4. AUTOCOMPLETADO PRO ---
-autoload -Uz compinit && compinit
+# --- 3. OH MY ZSH (NÚCLEO OPTIMIZADO) ---
+ZSH_THEME="" 
+DISABLE_AUTO_UPDATE="true"
+plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting)
+source $ZSH/oh-my-zsh.sh
+
+# --- 4. AUTOCOMPLETADO (Optimizado con caché) ---
+autoload -Uz compinit
+compinit -i -C -d "$HOME/.cache/zsh/zcompdump"
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Ignora mayúsculas
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-# --- 5. PROMPT PERSONALIZADO (Estilo Arch) ---
-# %F{blue} indica el logo de Arch. %~ es la ruta.
-PROMPT='%F{blue} %f %F{cyan}%~%f %F{yellow}➜ %f '
+# --- CONFIGURACIÓN DE HERRAMIENTAS ADICIONALES ---
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -lh --icons --group-directories-first'
 
-# --- 6. MIS ALIAS PERSONALIZADOS ---
-alias update='sudo pacman -Syu'
-alias install='sudo pacman -S'
-alias limpiar='sudo pacman -Rns $(pacman -Qdtq)'
-alias conf='vim ~/.config/i3/config'
-alias barconf='vim ~/.config/i3blocks/config'
-alias zconf='vim ~/.zshrc'
-alias n='ranger_cd'  # Un atajo rápido para tu gestor de archivos
-alias in='fastfetch'
-alias delete='sudo pacman -Rns'
-alias poweroff='sudo poweroff'
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 
-alias gemini='/home/diego-xir/Escritorio/gemini-app/venv/bin/python /home/diego-xir/Escritorio/gemini-app/main.py'
+# --- 5. ALIASES ---
 
-# Alias para MiniGemini (ajusta la ruta si es necesario)
-alias groq='/home/diego-xir/Escritorio/groq-app/venv/bin/python /home/diego-xir/Escritorio/groq-app/main.py'
+# --- 5. ALIASES ---
 
-# Variables para MiniGemini
-export GROQ_API_KEY='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'
-export ANTHROPIC_API_KEY='tu_llave_de_anthropic_aqui'
-export GEMINI_API_KEY='AIzaSyDwEbCAiP7uiabO8qq4NYuhy95Xgvv0u0Q'
+# Pacman (Prefijo 'p')
+alias pi='sudo pacman -S' # Instalar paquete
+alias pu='sudo pacman -Syu' # Actualizar sistema
+alias pr='sudo pacman -Rns' # Eliminar paquete y dependencias
+alias pl='sudo pacman -Qdtq' # Listar huérfanos [cite: 1]
 
-fastfetch
+# AUR (Prefijo 'a')
+alias ai='yay -S' # Instalar desde AUR
+alias au='yay -Syu' # Actualizar sistema + AUR
+alias ar='yay -Rns' # Eliminar paquete AUR
+alias ac='yay -Sc' # Limpiar caché de yay [cite: 1, 2]
 
-ranger_cd() {
-    tempfile="$(mktemp -t ranger_cd.XXXXXX)"
-    ranger --choosedir="$tempfile" "${@:-$PWD}"
-    if test -f "$tempfile"; then
-        if [ "$(cat -- "$tempfile")" != "$PWD" ]; then
-            cd -- "$(cat "$tempfile")" || return
-        fi
-    fi
-    rm -f -- "$tempfile"
+# Flatpak (Prefijo 'f')
+alias fi='flatpak install' # Instalar flatpak
+alias fu='flatpak update' # Actualizar flatpaks
+alias fr='flatpak uninstall' # Desinstalar flatpak
+alias fl='flatpak list' # Listar aplicaciones
+alias fc='flatpak uninstall --unused' # Limpiar residuos [cite: 1]
+
+# Sistema y Niri
+alias conf='nvim ~/.config/niri/config.kdl' # Configuración de Niri [cite: 1]
+alias barconf='nvim ~/.config/waybar/config.jsonc' # Configuración de Waybar [cite: 1]
+alias zconf='nvim ~/.zshrc' # Editar este archivo [cite: 1]
+alias in='fastfetch' # Información del sistema [cite: 1]
+alias poweroff='sudo poweroff' # Apagar equipo [cite: 1]
+alias freetube='~/.local/bin/freetube-software' # Abrir FreeTube [cite: 1]
+
+# Buscar alias específicos rápido
+alias ga='alias | grep' # Buscar un alias interactivo
+alias la='misalias' # Mostrar este mapa de alias
+
+# --- 6. FUNCIONES ---
+# Ver tus alias organizados estéticamente con descripciones
+misalias() {
+    echo -e "\n\e[1;212m  󰘵  MAPA DE ALIAS CONFIGURADOS \e[0m"
+    awk '
+    /^# [A-Z]/ {
+        section=$0; 
+        sub(/^# /, "", section); 
+        print "\n\033[1;111m󰿟 " section "\033[0m"
+    } 
+    /^alias / {
+        # Separar el comentario (descripción) si existe
+        desc = "";
+        if (match($0, /#[[:space:]]*.+$/)) {
+            desc = substr($0, RSTART);
+            sub(/^#[[:space:]]*/, "", desc);
+            $0 = substr($0, 1, RSTART-1);
+        }
+        
+        # Procesar el alias y el comando
+        split($0, a, "="); 
+        sub(/^alias /, "", a[1]); 
+        sub(/[[:space:]]+$/, "", a[1]); # Limpia espacios al final del alias
+        gsub(/\x27/, "", a[2]); # Quita comillas simples
+        sub(/[[:space:]]+$/, "", a[2]); # Limpia espacios al final del comando
+        
+        # Formato de salida de columnas: Alias (amarillo) | Comando (blanco) | Descripción (gris/cyan oscuro)
+        printf "  \033[1;149m%-10s\033[0m %-40s \033[0;90m# %s\033[0m\n", a[1], a[2], (desc ? desc : "Sin descripción")
+    }' ~/.zshrc
+    echo ""
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# --- 6. PROMPT Y EJECUCIÓN FINAL ---
+PROMPT='%F{111} %f %F{149}%~%f %F{212}➜ %f '
+fastfetch
+
+# --- 7. PATHS Y ENTORNO ---
+export PATH=/home/diego-xir/.opencode/bin:$PATH
+export PATH="$PATH:/home/diego-xir/.local/bin"
+export PATH=~/.npm-global/bin:$PATH
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
