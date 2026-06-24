@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Archivos
+Icon=org.xfce.thunar
+Exec=thunar %U
+Type=Application
+Categories=System;FileTransfer;FileManager;Utility;Core;GTK;

@@ -1,12 +1,72 @@
 {
-    "layer": "top",
+    // Define la profundidad de la barra en el sistema: "bottom" la fija al fondo del workspace y "top" la hace flotar sobre las ventanas.
+    "layer": "bottom",
     "position": "top",
     "margin-top": 4,
     "margin-left": 6,
     "margin-right": 6,
-    "modules-left": ["niri/workspaces", "niri/window"],
-    "modules-center": ["clock"],
-    "modules-right": ["cpu", "pulseaudio", "memory", "battery", "tray"],
+
+    "modules-left": [
+        "niri/workspaces",
+        "niri/window", 
+        "group/reproductor"
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+        "cpu",
+        "memory",
+        "pulseaudio",
+        "battery",
+        "tray",
+        "backlight",
+        "keyboard-state"
+    ],
+
+    "group/reproductor": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/player-text",
+            "custom/player-prev",
+            "custom/player-toggle",
+            "custom/player-next"
+        ]
+    },
+
+    "custom/player-text": {
+        "format": "󰎆 {}",
+        "return-type": "json",
+        "max-length": 25,
+        "exec": "~/.config/waybar/scripts/player-text.sh", // <-- Cambiado aquí
+        "on-click": "playerctl play-pause"
+    },    
+
+    "custom/player-prev": {
+        "format": "󰒮",
+        "on-click": "playerctl previous",
+        "tooltip": false
+    },
+
+    "custom/player-toggle": {
+        "format": "{icon}",
+        "return-type": "json",
+        "exec": "playerctl --follow status --format '{\"text\": \"{{status}}\", \"alt\": \"{{status}}\"}' 2>/dev/null",
+        "format-icons": {
+            "Playing": "⏸",
+            "Paused": "▶"
+        },
+        "on-click": "playerctl play-pause",
+        "tooltip": false
+    },
+
+    "custom/player-next": {
+        "format": "󰒭",
+        "on-click": "playerctl next",
+        "tooltip": false
+    },
 
     "niri/workspaces": {
         "format": "{icon}",
@@ -40,18 +100,33 @@
     "memory": {
         "format": "  {}%"
     },
-    "battery": {
-        "states": {
-            "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}  {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
+
+
     "tray": {
         "icon-size": 16,
         "spacing": 10,
         "show-passive-icons": true
-    }
+    },
+
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
 }

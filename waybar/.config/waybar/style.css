@@ -1,6 +1,6 @@
 * {
     border: none;
-    font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Hack Nerd Font Mono", Roboto, Helvetica, Arial, sans-serif;
     font-size: 12px;
 }
 
@@ -56,6 +56,42 @@ window#waybar {
 
 #pulseaudio {
 	color: #f38ba8;
+}
+
+
+#chip-container, /* Por si usas layouts modernos */
+#group-reproductor {
+    background-color: #0022cc; /* El azul intenso de tu diseño */
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin: 4px;
+}
+
+/* El texto de la canción */
+#custom-player-text {
+    color: #000000; /* Texto negro */
+    font-weight: bold;
+    padding-right: 15px;
+}
+
+/* Estilo general para los tres botones */
+#custom-player-prev,
+#custom-player-toggle,
+#custom-player-next {
+    background-color: #000000; /* Fondo negro circular */
+    color: #0022cc;            /* Icono azul */
+    border-radius: 50%;        /* Los hace círculos perfectos */
+    margin: 2px 4px;
+    padding: 0px 6px;          /* Ajusta esto según tu fuente para que queden redondos */
+    font-size: 14px;
+}
+
+/* Efecto hover opcional para cuando pases el mouse por los botones */
+#custom-player-prev:hover,
+#custom-player-toggle:hover,
+#custom-player-next:hover {
+    background-color: #222222;
+    color: #1144ff;
 }
 
 /* -----------------------------------------------------------------------------

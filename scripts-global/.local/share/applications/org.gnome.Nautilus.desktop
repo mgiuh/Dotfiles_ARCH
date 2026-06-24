@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Archivos
+Icon=org.gnome.Nautilus
+Exec=nautilus --new-window
+Type=Application
+NoDisplay=true

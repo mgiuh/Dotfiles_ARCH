@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FreeTube (Off-render)
+Comment=Reproductor de YouTube sin GPU para AMD E-450
+Exec=/home/domi/.scripts/apps_aceleracion_grafica_off/freetube.sh
+Icon=io.freetubeapp.FreeTube
+Categories=AudioVideo;Video;
+Terminal=false

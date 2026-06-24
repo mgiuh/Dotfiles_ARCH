@@ -2,9 +2,11 @@
 input {
     keyboard {
         xkb {
+
+
         }
-    
-	numlock
+
+        numlock
     }
 
     touchpad {
@@ -16,37 +18,60 @@ input {
     }
 
     trackpoint {
-}
+    }
 
 
 }
 
-output "LVDS-1" {
-       mode "1366x768@60.444"
-       scale 1
-       transform "normal"
-       position x=0 y=0
+output "eDP-1" {
+
+    mode "1366x768@60.00"
+
+    scale 1
+
+    transform "normal"
 }
 
 layout {
-    gaps 12
+    gaps 8
 
-    default-column-width { proportion 0.5; }
+    preset-column-widths {
+        proportion 0.5
+        proportion 0.75
+    }
+
+    default-column-width { proportion 1.0; }
 
     focus-ring {
-        width 4
-        active-gradient from="#f5c2e7" to="#89b4fa" angle=45
-        inactive-color "#313244"
+        off
+        width 0
+        active-color "#7fc8ff"
+        inactive-color "#505050"
     }
+
+    border {
+        width 2
+        active-color "#ffc87f"
+        inactive-color "#505050"
+        urgent-color "#9b0000"
+    }
+
+    tab-indicator width=0 gap=0 
+
+    shadow {
+        softness 8
+        spread 2
+        offset x=0 y=3
+        color "#0007"
+    }
+
+    struts {
+    }
+
+
 }
 
 spawn-at-startup "waybar"
-spawn-at-startup "xwayland-satellite"
-spawn-at-startup "rclone" "mount" "Gdrive:" "/home/diego-xir/Drive" "--vfs-cache-mode" "writes"
-spawn-at-startup "swaync"
-spawn-at-startup "waypaper" "--random"
-spawn-at-startup "/usr/lib/gsd-xsettings"
-spawn-at-startup "systemctl" "--user" "import-environment" "XCURSOR_THEME" "XCURSOR_SIZE"
 
 
 hotkey-overlay {
@@ -56,30 +81,30 @@ hotkey-overlay {
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 
+
 animations {
-// Configura el movimiento horizontal del scroll con físicas de resorte
+    slowdown 0.6
+
     horizontal-view-movement {
-        spring damping-ratio=0.8 stiffness=800 epsilon=0.0001
-    }
-
-    // Suaviza la apertura y cierre de ventanas
-    window-open {
-        spring damping-ratio=0.75 stiffness=600 epsilon=0.0001
-    }
+        spring stiffness=500 damping-ratio=1.0 epsilon=0.0001
 }
 
+    window-open { 
+        spring stiffness=500 damping-ratio=2.0 epsilon=0.0001; 
+    }
 
-window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
+    window-close { 
+        spring stiffness=400 damping-ratio=2.0 epsilon=0.0001; 
+    }
 }
 
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
+    match app-id="waybar"
+    // Forzamos a que no intente dibujar bordes ni alterar el comportamiento del layout
+    open-maximized false
 }
 
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
@@ -100,19 +125,20 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
-    Mod+A { spawn "/home/diego-xir/.config/niri/scripts/toggle-dock.sh"; }
+  /-Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
-
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    Alt+U allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0"; }
+    Alt+D allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
+    Alt+M allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
-    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
-    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
-    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+    Alt+P allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    Alt+S allow-when-locked=true { spawn-sh "playerctl stop"; }
+    Alt+B allow-when-locked=true { spawn-sh "playerctl previous"; }
+    Alt+N allow-when-locked=true { spawn-sh "playerctl next"; }
+
+Alt+F10 { spawn "brightnessctl" "set" "+5%"; }
+Alt+F9  { spawn "brightnessctl" "set" "5%-"; }
 
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
@@ -262,13 +288,4 @@ binds {
     Ctrl+Alt+Delete { quit; }
 
     Mod+Shift+P { power-off-monitors; }
-}
-
-cursor {
-	xcursor-theme "MogaNeon"
-	xcursor-size 30
-}
-
-environment {
-    DISPLAY ":0"
 }
